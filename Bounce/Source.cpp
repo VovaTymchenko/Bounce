@@ -1,21 +1,18 @@
 #include <iostream>
 #include "Renderer.h"
 #include "Circle.h"
-#include <chrono>
-#include <thread>
+//#include <chrono>
+//#include <thread>
 
 int main()
 {
-	Circle circle1;
-	AddCircle(circle1);
-	
-	circle1.cx = 70;
+	Circle* circle1 = new Circle();
 	AddCircle(circle1);
 
-	Circle circle2(40, 40, 0, 30);
+	Circle* circle2 = new Circle(40, 40, 0, 30);
 	AddCircle(circle2);
 	
-	//while (true) //main loop - redraws frames
+	while (true) //main loop - redraws frames
 	{
 		MakeFrame();
 		DrawFrame();

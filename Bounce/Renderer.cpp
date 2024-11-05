@@ -14,7 +14,7 @@ int frame[frameH + 1][frameW + 1]; //frame "pixel" data
 
 std::vector<Circle*> circles; //array of the objects to be displayed
 
-void DrawFrame()
+void DrawFrame() //uses the int frame array to pick characters from the symb gradient depending on the number of overlapping objects, then prints the character in console
 {
 	system("cls");
 
@@ -26,12 +26,9 @@ void DrawFrame()
 		}
 		cout << "\n";
 	}
-	cout << circles[0] << endl;
-	cout << circles[1] << endl;
-	cout << circles[2] << endl;
 }
 
-void MakeFrame()
+void MakeFrame() //runs through the matrix of y rows and x cols, checking if any of the objects should be displayed at the given coordinates. Uses an increment to determine how many objects overlap at a single coordinate
 {
 	for (int i = 0; i < frameH; i++)
 	{
@@ -46,12 +43,14 @@ void MakeFrame()
 	}
 }
 
-void AddCircle(Circle pCircle)
+void AddCircle(Circle* pCircle) //adds pointer to a new Circle() object to the array of scene objects
 {
-	circles.push_back(&pCircle);
+	circles.push_back(pCircle);
 }
 
-void RemoveCircle(int index)
+void RemoveCircle(int index) //removes Circle pointer from the array of scene objects and reallocates memory
 { 
+	Circle* circle = circles[index];
 	circles.erase(circles.begin() + index);
+	delete circle;
 }
