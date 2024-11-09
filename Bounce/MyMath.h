@@ -5,6 +5,7 @@ struct vector2d
 	float x, y;
 	vector2d();
 	vector2d(float x, float y);
+	vector2d Normalize(); //returns a new vector which is this normalized
 	vector2d MultScalar(float scalar); //returns a new vector which is this multiplied by scalar
 	float DotProduct(vector2d vector2); //return dot product of this and another vector
 };

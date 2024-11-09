@@ -35,7 +35,8 @@ void Ball::Bounce(std::vector<Circle*> circles, std::vector<Ball*> balls, int i,
 		float distance = FindLength(circles[k]->cx, circles[k]->cy, balls[i]->cx, balls[i]->cy);
 		if (abs(distance - circles[k]->r - balls[i]->r) <= circles[k]->thickness + balls[i]->thickness) //radius is supposed to always be 0, but ill leave it in the formula just in case
 		{ 
-			
+			vector2d normal(balls[i]->cx - circles[k]->cx, balls[i]->cy - circles[k]->cy);
+			normal.Normalize();
 
 			spdX = -spdX; spdY = -spdY;
 		}
