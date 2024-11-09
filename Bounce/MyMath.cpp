@@ -13,24 +13,29 @@ vector2d::vector2d(float x, float y)
 	this->y = y;
 }
 
-vector2d vector2d::Normalize() //returns a new vector which is this normalized
+vector2d Normalize(vector2d vector) //returns a new vector which is this normalized
 {
-	vector2d newVec2d(this->x, this->y);
-	newVec2d = newVec2d.MultScalar(pow(FindLength(newVec2d.x, newVec2d.y), -1));
-	return newVec2d;
+	vector = MultScalar(vector, pow(FindLength(vector), -1));
+	return vector;
 }
 
-vector2d vector2d::MultScalar(float scalar) //returns a new vector which is this multiplied by scalar
+vector2d MultScalar(vector2d vector, float scalar) //returns a new vector which is this multiplied by scalar
 {
-	vector2d newVec2d(this->x, this->y);
-	newVec2d.x *= scalar;
-	newVec2d.y *= scalar;
-	return newVec2d;
+	vector.x *= scalar;
+	vector.y *= scalar;
+	return vector;
 }
 
-float vector2d::DotProduct(vector2d vector2) //return dot product of this and another vector
+vector2d AddVector(vector2d vector, vector2d vector2) //returns a sum of two vectors
 {
-	return (this->x * vector2.x + this->y * vector2.y);
+	vector.x += vector2.x;
+	vector.y += vector2.y;
+	return vector;
+}
+
+float DotProduct(vector2d vector1, vector2d vector2) //return dot product of this and another vector
+{
+	return (vector1.x * vector2.x + vector1.y * vector2.y);
 }
 
 float FindLength(float x1, float y1, float x2, float y2) //find distance between two coordinates
@@ -38,7 +43,7 @@ float FindLength(float x1, float y1, float x2, float y2) //find distance between
 	return abs(sqrt(pow((x2 - x1), 2) + pow((y2 - y1), 2)));
 }
 
-float FindLength(float x, float y) //find length of a vector
+float FindLength(vector2d vector) //find length of a vector
 {
-	return abs(sqrt(pow(x, 2) + pow(y, 2)));
+	return abs(sqrt(pow(vector.x, 2) + pow(vector.y, 2)));
 }

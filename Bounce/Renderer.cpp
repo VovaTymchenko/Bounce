@@ -3,8 +3,6 @@
 #include <vector>
 #include "Renderer.h"
 #include "MyMath.h"
-#include "Circle.h"
-#include "Ball.h"
 
 using namespace std;
 

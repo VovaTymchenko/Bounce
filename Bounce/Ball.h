@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include "MyMath.h"
 #include "Circle.h"
 
 class Ball : public Circle
