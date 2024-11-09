@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string> //!!!!!
 #include <stdlib.h>
 #include <vector>
 #include "Renderer.h"
@@ -10,7 +11,7 @@ const char symb[6] = { ' ', '.', ':' , ';' , '+' , '#' }; //console gradient for
 
 const float symbH = 10, symbW = 5; //console symbol pixel size
 const float symbMod = symbH / symbW;
-const int frameH = 80, frameW = 160; //draw surface dimensions - 1
+const int frameH = 140, frameW = 280; //draw surface dimensions - 1
 int frame[frameH + 1][frameW + 1]; //frame "pixel" data
 
 std::vector<Circle*> circles; //array of the objects to be displayed
@@ -22,16 +23,24 @@ void DrawFrame() //uses the int frame array to pick characters from the symb gra
 
 	for (int i = 0; i < frameH; i++)
 	{
+		char curline[frameW + 2];
 		for (int j = 0; j < frameW; j++)
 		{
-			cout << symb[min(frame[i][j], 5)];
+			curline[j] = symb[min(frame[i][j], 5)];
+			//cout << symb[min(frame[i][j], 5)];
 		}
-		cout << "|" << "\n";
+		curline[frameW] = '|';
+		curline[frameW + 1] = 0;
+		cout << curline << "\n";
 	}
+	char curline[frameW + 2];
 	for (int j = 0; j < frameW; j++)
 	{
-		cout << "-";
+		curline[j] = '-';
 	}
+	curline[frameW] = '+';
+	curline[frameW + 1] = 0;
+	cout << curline << "\n";
 }
 
 void MakeFrame() //runs through the matrix of y rows and x cols, checking if any of the objects should be displayed at the given coordinates. Uses an increment to determine how many objects overlap at a single coordinate
