@@ -41,13 +41,13 @@ void MakeFrame() //runs through the matrix of y rows and x cols, checking if any
 			frame[i][j] = 0;
 			for (int k = 0; k < circles.size(); k++) //circles
 			{
-				float distance = FindDistance(circles[k]->cx, circles[k]->cy, j, i * symbMod);
+				float distance = FindLength(circles[k]->cx, circles[k]->cy, j, i * symbMod);
 				if (abs(distance - circles[k]->r) <= circles[k]->thickness) frame[i][j] = frame[i][j] + 1;
 			}
 
 			for (int k = 0; k < balls.size(); k++) //balls
 			{
-				float distance = FindDistance(balls[k]->cx, balls[k]->cy, j, i * symbMod);
+				float distance = FindLength(balls[k]->cx, balls[k]->cy, j, i * symbMod);
 				if (abs(distance - balls[k]->r) <= balls[k]->thickness) frame[i][j] = frame[i][j] + 1; //radius is supposed to always be 0, but ill leave it in the formula just in case
 			}
 		}

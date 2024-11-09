@@ -32,15 +32,24 @@ void Ball::Bounce(std::vector<Circle*> circles, std::vector<Ball*> balls, int i,
 {
 	for (int k = 0; k < circles.size(); k++) //checking collision with circles
 	{
-		float distance = FindDistance(circles[k]->cx, circles[k]->cy, balls[i]->cx, balls[i]->cy);
-		if (abs(distance - circles[k]->r - balls[i]->r) <= circles[k]->thickness + balls[i]->thickness) { spdX = -spdX; spdY = -spdY; }; //radius is supposed to always be 0, but ill leave it in the formula just in case
+		float distance = FindLength(circles[k]->cx, circles[k]->cy, balls[i]->cx, balls[i]->cy);
+		if (abs(distance - circles[k]->r - balls[i]->r) <= circles[k]->thickness + balls[i]->thickness) //radius is supposed to always be 0, but ill leave it in the formula just in case
+		{ 
+			
+
+			spdX = -spdX; spdY = -spdY;
+		}
 	}
 
 	for (int k = 0; k < balls.size(); k++) //checking collision with balls
 	{
 		if (k == i) continue;
-		float distance = FindDistance(balls[k]->cx, balls[k]->cy, balls[i]->cx, balls[i]->cy);
-		if (abs(distance - balls[k]->r - balls[i]->r) <= balls[k]->thickness + balls[i]->thickness) { spdX = -spdX; spdY = -spdY; }; //radius is supposed to always be 0, but ill leave it in the formula just in case
+
+		float distance = FindLength(balls[k]->cx, balls[k]->cy, balls[i]->cx, balls[i]->cy);
+		if (abs(distance - balls[k]->r - balls[i]->r) <= balls[k]->thickness + balls[i]->thickness) //radius is supposed to always be 0, but ill leave it in the formula just in case
+		{
+			spdX = -spdX; spdY = -spdY;
+		}
 	}
 }
 
