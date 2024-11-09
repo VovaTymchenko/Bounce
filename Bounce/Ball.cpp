@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Ball.h"
 
 Ball::Ball()
@@ -34,17 +35,15 @@ void Ball::Bounce(std::vector<Circle*> circles, std::vector<Ball*> balls, int i,
 		if (abs(distance - circles[k]->r - balls[i]->r) <= circles[k]->thickness + balls[i]->thickness) //radius is supposed to always be 0, but ill leave it in the formula just in case
 		{ 
 			vector2d normal(balls[i]->cx - circles[k]->cx, balls[i]->cy - circles[k]->cy);
-			Normalize(normal);
+			normal = Normalize(normal);
 
 			vector2d velocity(spdX, spdY);
-			AddVector(velocity, MultScalar(normal, (-2 * DotProduct(velocity, normal))));
+			vector2d newVelocity = AddVector(velocity, MultScalar(normal, (-2 * DotProduct(velocity, normal))));
 			//v new = v - 2(v . n) * n
 			//^^^velocity - 2 * projection of velocity on normal^^^
 
-
-
-
-			spdX = -spdX; spdY = -spdY;
+			spdX = newVelocity.x * 2;
+			spdY = newVelocity.y * 2;
 		}
 	}
 
@@ -55,7 +54,16 @@ void Ball::Bounce(std::vector<Circle*> circles, std::vector<Ball*> balls, int i,
 		float distance = FindLength(balls[k]->cx, balls[k]->cy, balls[i]->cx, balls[i]->cy);
 		if (abs(distance - balls[k]->r - balls[i]->r) <= balls[k]->thickness + balls[i]->thickness) //radius is supposed to always be 0, but ill leave it in the formula just in case
 		{
-			spdX = -spdX; spdY = -spdY;
+			vector2d normal(balls[i]->cx - circles[k]->cx, balls[i]->cy - circles[k]->cy);
+			Normalize(normal);
+
+			vector2d velocity(spdX, spdY);
+			vector2d newVelocity = AddVector(velocity, MultScalar(normal, (-2 * DotProduct(velocity, normal))));
+			//v new = v - 2(v . n) * n
+			//^^^velocity - 2 * projection of velocity on normal^^^
+
+			spdX = newVelocity.x * 2;
+			spdY = newVelocity.y * 2;
 		}
 	}
 }
