@@ -27,8 +27,11 @@ void Ball::Move() //change coordinates based on the ball speed
 	cy += spdY;
 }
 
-void Ball::Bounce(std::vector<Circle*> circles, std::vector<Ball*> balls, int i, float symbMod) //handling collisions
+void Ball::Bounce(std::vector<Circle*> circles, std::vector<Ball*> balls, int i, float symbMod, const int frameH, const int frameW) //handling collisions
 {
+	if (balls[i]->cx - balls[i]->r - balls[i]->thickness <= 0 || balls[i]->cx + balls[i]->r + balls[i]->thickness >= frameW) balls[i]->spdX = -spdX;
+	else if (balls[i]->cy - balls[i]->r - balls[i]->thickness <= 0 || balls[i]->cy + balls[i]->r + balls[i]->thickness >= frameH * symbMod) balls[i]->spdY = -spdY;
+
 	for (int k = 0; k < circles.size(); k++) //checking collision with circles
 	{
 		float distance = FindLength(circles[k]->cx, circles[k]->cy, balls[i]->cx, balls[i]->cy);
@@ -42,8 +45,10 @@ void Ball::Bounce(std::vector<Circle*> circles, std::vector<Ball*> balls, int i,
 			//v new = v - 2(v . n) * n
 			//^^^velocity - 2 * projection of velocity on normal^^^
 
-			spdX = newVelocity.x * 2;
-			spdY = newVelocity.y * 2;
+			spdX = newVelocity.x;
+			spdY = newVelocity.y;
+
+			break;
 		}
 	}
 
@@ -62,8 +67,10 @@ void Ball::Bounce(std::vector<Circle*> circles, std::vector<Ball*> balls, int i,
 			//v new = v - 2(v . n) * n
 			//^^^velocity - 2 * projection of velocity on normal^^^
 
-			spdX = newVelocity.x * 2;
-			spdY = newVelocity.y * 2;
+			spdX = newVelocity.x;
+			spdY = newVelocity.y;
+
+			break;
 		}
 	}
 }

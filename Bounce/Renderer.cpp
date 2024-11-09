@@ -26,7 +26,11 @@ void DrawFrame() //uses the int frame array to pick characters from the symb gra
 		{
 			cout << symb[min(frame[i][j], 5)];
 		}
-		cout << "\n";
+		cout << "|" << "\n";
+	}
+	for (int j = 0; j < frameW; j++)
+	{
+		cout << "-";
 	}
 }
 
@@ -53,7 +57,7 @@ void MakeFrame() //runs through the matrix of y rows and x cols, checking if any
 	for (int i = 0; i < balls.size(); i++)
 	{
 		balls[i]->Move();
-		balls[i]->Bounce(circles, balls, i, symbMod);
+		balls[i]->Bounce(circles, balls, i, symbMod, frameH, frameW);
 	}
 }
 

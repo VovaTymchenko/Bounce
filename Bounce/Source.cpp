@@ -30,7 +30,7 @@ int main()
 	Ball* ball1 = new Ball();
 	AddBall(ball1);
 
-	Ball* ball2 = new Ball(30, 70, 7, -0.2, -4);
+	Ball* ball2 = new Ball(30, 70, 7, 6, -9);
 	AddBall(ball2);
 
 	while (true) //main loop - redraws frames
