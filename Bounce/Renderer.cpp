@@ -1,5 +1,4 @@
 #include <iostream>
-#include <string> //!!!!!
 #include <stdlib.h>
 #include <vector>
 #include "Renderer.h"
@@ -11,7 +10,7 @@ const char symb[6] = { ' ', '.', ':' , ';' , '+' , '#' }; //console gradient for
 
 const float symbH = 10, symbW = 5; //console symbol pixel size
 const float symbMod = symbH / symbW;
-const int frameH = 140, frameW = 280; //draw surface dimensions - 1
+const int frameH = 90, frameW = 180; //draw surface dimensions - 1
 int frame[frameH + 1][frameW + 1]; //frame "pixel" data
 
 std::vector<Circle*> circles; //array of the objects to be displayed
@@ -19,28 +18,27 @@ std::vector<Ball*> balls; //array of the objects to be displayed
 
 void DrawFrame() //uses the int frame array to pick characters from the symb gradient depending on the number of overlapping objects, then prints the character in console
 {
-	system("cls");
-
+	char curline[(frameW + 2) * (frameH + 1)];
 	for (int i = 0; i < frameH; i++)
 	{
-		char curline[frameW + 2];
 		for (int j = 0; j < frameW; j++)
 		{
-			curline[j] = symb[min(frame[i][j], 5)];
+			//if (i > 0 && j < 1) j = 1;
+			curline[i * (frameW + 2) + j] = symb[min(frame[i][j], 5)];
 			//cout << symb[min(frame[i][j], 5)];
 		}
-		curline[frameW] = '|';
-		curline[frameW + 1] = 0;
-		cout << curline << "\n";
+		curline[i * (frameW + 2) + frameW] = '|';
+		curline[i * (frameW + 2) + frameW + 1] = '\n';
 	}
-	char curline[frameW + 2];
+	
 	for (int j = 0; j < frameW; j++)
 	{
-		curline[j] = '-';
+		curline[(frameW + 2) * frameH + j] = '-';
 	}
-	curline[frameW] = '+';
-	curline[frameW + 1] = 0;
-	cout << curline << "\n";
+	curline[(frameW + 2) * frameH + frameW] = '+';
+	curline[(frameW + 2) * frameH + frameW + 1] = 0;
+	system("cls");
+	cout << curline;
 }
 
 void MakeFrame() //runs through the matrix of y rows and x cols, checking if any of the objects should be displayed at the given coordinates. Uses an increment to determine how many objects overlap at a single coordinate
