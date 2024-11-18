@@ -27,10 +27,31 @@ void Ball::Move() //change coordinates based on the ball speed
 	cy += spdY;
 }
 
-void Ball::Bounce(std::vector<Circle*> circles, std::vector<Ball*> balls, int i, float symbMod, const int frameH, const int frameW) //handling collisions
+void Ball::Bounce(const std::vector<Circle*>& circles, const std::vector<Ball*>& balls, int i, float symbMod, const int frameH, const int frameW) //handling collisions
 {
-	if (balls[i]->cx - balls[i]->r - balls[i]->thickness <= 0 || balls[i]->cx + balls[i]->r + balls[i]->thickness >= frameW) balls[i]->spdX = -spdX;
-	if (balls[i]->cy - balls[i]->r - balls[i]->thickness <= 0 || balls[i]->cy + balls[i]->r + balls[i]->thickness >= frameH * symbMod) balls[i]->spdY = -spdY;
+	//left & right bounce
+	if (balls[i]->cx - balls[i]->r - balls[i]->thickness <= 0) //left
+	{
+		balls[i]->cx += 2 * ((balls[i]->r + balls[i]->thickness) - balls[i]->cx); //turns overshoot into position after precise bounce
+		balls[i]->spdX = -spdX;
+	}
+	if (balls[i]->cx + balls[i]->r + balls[i]->thickness >= frameW) //right
+	{
+		balls[i]->cx -= 2 * ((balls[i]->r + balls[i]->thickness) - frameW + balls[i]->cx); //turns overshoot into position after precise bounce
+		balls[i]->spdX = -spdX;
+	}
+
+	//top & bottom bounce
+	if (balls[i]->cy - balls[i]->r - balls[i]->thickness <= 0) //bottom
+	{
+		balls[i]->cy += 2 * ((balls[i]->r + balls[i]->thickness) - balls[i]->cy); //turns overshoot into position after precise bounce
+		balls[i]->spdY = -spdY;
+	}
+	if (balls[i]->cy + balls[i]->r + balls[i]->thickness >= frameH * symbMod) //top
+	{
+		balls[i]->cy -= 2 * ((balls[i]->r + balls[i]->thickness) - (frameH * symbMod) + balls[i]->cy); //turns overshoot into position after precise bounce
+		balls[i]->spdY = -spdY;
+	}
 
 	for (int k = 0; k < circles.size(); k++) //checking collision with circles
 	{
