@@ -9,7 +9,7 @@ const char symb[6] = { ' ', '.', ':' , ';' , '+' , '#' }; //console gradient for
 
 const float symbH = 10, symbW = 5; //console symbol pixel size
 const float symbMod = symbH / symbW;
-const int frameH = 90, frameW = 180; //draw surface dimensions - 1
+const int frameH = 90, frameW = 180; //draw surface dimensions - 2
 int frame[frameH + 1][frameW + 1]; //frame "pixel" data
 
 std::vector<Circle*> circles; //array of the objects to be displayed

@@ -28,7 +28,7 @@ int main()
 
 	Circle* circle2 = new Circle(90, 90, 0, 30);
 	//AddCircle(circle2);
-	
+
 	Ball* ball2 = new Ball(30, 70, 8, 2.4, -4.7);
 	AddBall(ball2);
 

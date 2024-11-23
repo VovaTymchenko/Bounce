@@ -58,9 +58,6 @@ void Ball::Bounce(const std::vector<Circle*>& circles, const std::vector<Ball*>&
 		float distance = FindLength(circles[k]->cx, circles[k]->cy, balls[i]->cx, balls[i]->cy);
 		if (abs(distance - circles[k]->r - balls[i]->r) <= circles[k]->thickness + balls[i]->thickness) //radius is supposed to always be 0, but ill leave it in the formula just in case
 		{
-			balls[i]->cx -= spdX;
-			balls[i]->cy -= spdY;
-
 			vector2d normal(balls[i]->cx - circles[k]->cx, balls[i]->cy - circles[k]->cy);
 			normal = Normalize(normal);
 
@@ -83,8 +80,20 @@ void Ball::Bounce(const std::vector<Circle*>& circles, const std::vector<Ball*>&
 		float distance = FindLength(balls[k]->cx, balls[k]->cy, balls[i]->cx, balls[i]->cy);
 		if (abs(distance - balls[k]->r - balls[i]->r) <= balls[k]->thickness + balls[i]->thickness) //radius is supposed to always be 0, but ill leave it in the formula just in case
 		{
-			//balls[i]->cx -= spdX / 2;
-			//balls[i]->cy -= spdY / 2;
+			//this might look rather complicated, but all this is a result of figuring out a location where the colliding objects should have met between the "pre-collision" -> "collision" frames
+			//to work out the "time" multiplier for the speeds of the objects, this formula was used:
+			// 
+			//||(c1,0 + t * v1) - (c2,0 + t * v2)|| = r1 + r2
+			// 
+			//where c1,0 and c2,0 are objects' "pre-collision" frame location vectors, v1 and v2 are their speed vectors, r1 and r2 are radiuses, and the "time" t is the speed multiplier we are trying to find
+			//after doing some maths to find the formula for the "time" t, we get a quadratic equation:
+			float t, A, B, C; //quadratic equation parameters
+			vector2d deltaC0 = AddVector(vector2d(balls[i]->cx, balls[i]->cy), vector2d(-balls[k]->cx, -balls[k]->cy));
+			vector2d deltaV = AddVector(vector2d(balls[i]->spdX, balls[i]->spdY), vector2d(-balls[k]->spdX, -balls[k]->spdY));
+			A = pow(FindLength(deltaV), 2); //square the length of delta v
+			B = 2 * DotProduct(deltaC0, deltaV); //2 * (delta c0 dot delta v)
+			C = pow(FindLength(deltaC0), 2) - pow((balls[i]->r + balls[k]->r), 2); //square the length of delta c0 - square the sum of r
+			t = (-B + sqrt(pow(B, 2) - 4 * A * C)) / (2 * A); //the quadratic equation
 
 			vector2d normal(balls[i]->cx - balls[k]->cx, balls[i]->cy - balls[k]->cy);
 			normal = Normalize(normal);
