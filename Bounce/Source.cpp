@@ -9,14 +9,13 @@
 
 /*
 things to consider :
-	* - i would like to dig deeper into "how do i increase fps here?", most likely changing the way i draw frames AND/OR make them (think double buffering)
-	- i might want to change how i store pointers to circles and balls in the renderer (so that they are not separate)
-	- Ball::Bounce() is not looking good, im pretty sure i can come up with a pretty solution if i put some thoughts into that
-	- adding a scale value for rendering might be a good idea - if i want more objects to display preserving relative distance between them, multiplying x and y coordinates in the MakeFrame() loop
-
-	* frames are still flickering, but i think it is a limitaiton of console printing
-
-P.S: for the full list address the cereal lists
+	- sometimes Bounce() function might produce unexpected results due to the nature of computing itself. Because all operations are done in a sequence, having balls with higher speeds might result in "fake" bounces, that
+		would not happen if all the balls were moving simultaneously (if after a frame update a single ball collides with two other objects, it is hard to tell which object it should have collided with first). To improve 
+		situation, I can add a variable "precision", which would measure how many times should the scene update per frame. With this, each update would move balls by (spdX / precision, spdY / precision), preserving the 
+		displacement of the balls between frames, while improving the precision of all collisions by fixing the order of bounces.
+		
+		WARNING: this will increase the complexity behind each frame from O(n) to O(n*precision). Since currently the bottleneck of console drawing framerate is output, low precision values should not cause problems, but
+		as precision value gets bigger it might start increasing the time it takes to update each frame, potentionally dramatically reducing framerate.
 */
 
 

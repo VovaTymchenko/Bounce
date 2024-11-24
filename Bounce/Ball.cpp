@@ -80,6 +80,8 @@ void Ball::Bounce(const std::vector<Circle*>& circles, const std::vector<Ball*>&
 		float distance = FindLength(balls[k]->cx, balls[k]->cy, balls[i]->cx, balls[i]->cy);
 		if (abs(distance - balls[k]->r - balls[i]->r) <= balls[k]->thickness + balls[i]->thickness) //radius is supposed to always be 0, but ill leave it in the formula just in case
 		{
+			balls[k]->cx -= spdX;
+			balls[k]->cy -= spdY;
 			//this might look rather complicated, but all this is a result of figuring out a location where the colliding objects should have met between the "pre-collision" -> "collision" frames
 			//to work out the "time" multiplier for the speeds of the objects, this formula was used:
 			// 
@@ -92,10 +94,10 @@ void Ball::Bounce(const std::vector<Circle*>& circles, const std::vector<Ball*>&
 			vector2d deltaV = AddVector(vector2d(balls[i]->spdX, balls[i]->spdY), vector2d(-balls[k]->spdX, -balls[k]->spdY));
 			A = pow(FindLength(deltaV), 2); //square the length of delta v
 			B = 2 * DotProduct(deltaC0, deltaV); //2 * (delta c0 dot delta v)
-			C = pow(FindLength(deltaC0), 2) - pow((balls[i]->r + balls[k]->r), 2); //square the length of delta c0 - square the sum of r
+			C = pow(FindLength(deltaC0), 2) - pow((balls[i]->r + balls[i]->thickness + balls[k]->r + balls[k]->thickness), 2); //square the length of delta c0 - square the sum of r
 			t = (-B + sqrt(pow(B, 2) - 4 * A * C)) / (2 * A); //the quadratic equation
 
-			vector2d normal(balls[i]->cx - balls[k]->cx, balls[i]->cy - balls[k]->cy);
+			vector2d normal((balls[i]->cx + balls[i]->spdX * t) - (balls[k]->cx + balls[k]->spdX * t), (balls[i]->cy + balls[i]->spdY * t) - (balls[k]->cy + balls[k]->spdY * t));
 			normal = Normalize(normal);
 
 			vector2d velocity(spdX, spdY);
