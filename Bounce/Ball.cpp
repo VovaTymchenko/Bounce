@@ -91,15 +91,26 @@ void Ball::Bounce(const std::vector<Circle*>& circles, const std::vector<Ball*>&
 			// 
 			//where c1,0 and c2,0 are objects' "pre-collision" frame location vectors, v1 and v2 are their speed vectors, r1 and r2 are radiuses, and the "time" t is the speed multiplier we are trying to find
 			//after doing some maths to find the formula for the "time" t, we get a quadratic equation:
-			float t, A, B, C; //quadratic equation parameters
+			float t, t1, t2, A, B, C; //quadratic equation parameters
 			vector2d deltaC0 = AddVector(vector2d(balls[i]->cx, balls[i]->cy), vector2d(-balls[k]->cx, -balls[k]->cy));
 			vector2d deltaV = AddVector(vector2d(balls[i]->spdX, balls[i]->spdY), vector2d(-balls[k]->spdX, -balls[k]->spdY));
 			A = pow(FindLength(deltaV), 2); //square the length of delta v
 			B = 2 * DotProduct(deltaC0, deltaV); //2 * (delta c0 dot delta v)
 			C = pow(FindLength(deltaC0), 2) - pow((balls[i]->r + balls[i]->thickness + balls[k]->r + balls[k]->thickness), 2); //square the length of delta c0 - square the sum of r
-			t = (-B + sqrt(pow(B, 2) - 4 * A * C)) / (2 * A); //the quadratic equation
+			t1 = (-B + sqrt(pow(B, 2) - 4 * A * C)) / (2 * A); //the quadratic equation
+			t2 = (-B - sqrt(pow(B, 2) - 4 * A * C)) / (2 * A); //the quadratic equation
+			if (t1 < t2) t = t1;
+			else t = t2;
 			//t has a 0 to 1 value, which lets us move the balls by a range of distances from (0, 0) to (spdX, spdY). It's pretty much a mask value
 
+			if ((pow(B, 2) - 4 * A * C) <= 0)
+			{
+				while (true)
+				{
+					std::cout << "youre a fool \n";
+				}
+			}
+			
 			vector2d normal((balls[i]->cx + balls[i]->spdX * t) - (balls[k]->cx + balls[k]->spdX * t), (balls[i]->cy + balls[i]->spdY * t) - (balls[k]->cy + balls[k]->spdY * t));
 			normal = Normalize(normal); //normal for balls[i]
 			vector2d normalK = MultScalar(normal, -1); //normal for balls[k]
