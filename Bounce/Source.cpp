@@ -11,11 +11,14 @@
 things to consider :
 	- sometimes Bounce() function might produce unexpected results due to the nature of computing itself. Because all operations are done in a sequence, having balls with higher speeds might result in "fake" bounces, that
 		would not happen if all the balls were moving simultaneously (if after a frame update a single ball collides with two other objects, it is hard to tell which object it should have collided with first). To improve 
-		situation, I can add a variable "precision", which would measure how many times should the scene update per frame. With this, each update would move balls by (spdX / precision, spdY / precision), preserving the 
+		situation, I can add a variable "precision", which would measure how many times should the scene update per frame. With this, each update would move balls by (spdX / precision, spdY / precision)*, preserving the 
 		displacement of the balls between frames, while improving the precision of all collisions by fixing the order of bounces.
 		
 		WARNING: this will increase the complexity behind each frame from O(n) to O(n*precision). Since currently the bottleneck of console drawing framerate is output, low precision values should not cause problems, but
 		as precision value gets bigger it might start increasing the time it takes to update each frame, potentionally dramatically reducing framerate.
+
+		*in reality, their speed will be initially set to spdX / precision, and a loop in the main() will call MakeFrame() precision times, so it's not moving it by a fraction of its speed, but making its speed a fraction 
+		and then moving normally "precision" times
 */
 
 

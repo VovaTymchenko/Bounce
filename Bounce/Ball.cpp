@@ -73,15 +73,17 @@ void Ball::Bounce(const std::vector<Circle*>& circles, const std::vector<Ball*>&
 		}
 	}
 
-	for (int k = 0; k < balls.size(); k++) //checking collision with balls
+	for (int k = i + 1; k < balls.size(); k++) //checking collision with balls
 	{
-		if (k == i) continue;
-
 		float distance = FindLength(balls[k]->cx, balls[k]->cy, balls[i]->cx, balls[i]->cy);
 		if (abs(distance - balls[k]->r - balls[i]->r) <= balls[k]->thickness + balls[i]->thickness) //radius is supposed to always be 0, but ill leave it in the formula just in case
 		{
-			balls[k]->cx -= spdX;
-			balls[k]->cy -= spdY;
+			//return both balls to pre-collision state
+			balls[i]->cx -= balls[i]->spdX;
+			balls[i]->cy -= balls[i]->spdY;
+			balls[k]->cx -= balls[k]->spdX;
+			balls[k]->cy -= balls[k]->spdY;
+
 			//this might look rather complicated, but all this is a result of figuring out a location where the colliding objects should have met between the "pre-collision" -> "collision" frames
 			//to work out the "time" multiplier for the speeds of the objects, this formula was used:
 			// 
@@ -96,19 +98,36 @@ void Ball::Bounce(const std::vector<Circle*>& circles, const std::vector<Ball*>&
 			B = 2 * DotProduct(deltaC0, deltaV); //2 * (delta c0 dot delta v)
 			C = pow(FindLength(deltaC0), 2) - pow((balls[i]->r + balls[i]->thickness + balls[k]->r + balls[k]->thickness), 2); //square the length of delta c0 - square the sum of r
 			t = (-B + sqrt(pow(B, 2) - 4 * A * C)) / (2 * A); //the quadratic equation
+			//t has a 0 to 1 value, which lets us move the balls by a range of distances from (0, 0) to (spdX, spdY). It's pretty much a mask value
 
 			vector2d normal((balls[i]->cx + balls[i]->spdX * t) - (balls[k]->cx + balls[k]->spdX * t), (balls[i]->cy + balls[i]->spdY * t) - (balls[k]->cy + balls[k]->spdY * t));
-			normal = Normalize(normal);
+			normal = Normalize(normal); //normal for balls[i]
+			vector2d normalK = MultScalar(normal, -1); //normal for balls[k]
 
-			vector2d velocity(spdX, spdY);
-			vector2d newVelocity = AddVector(velocity, MultScalar(normal, (-2 * DotProduct(velocity, normal))));
+			vector2d velocity(balls[i]->spdX, balls[i]->spdY);
+			vector2d newVelocity = AddVector(velocity, MultScalar(normal, (-2 * DotProduct(velocity, normal)))); //velocity for balls[i]
+			vector2d velocityK(balls[k]->spdX, balls[k]->spdY);
+			vector2d newVelocityK = AddVector(velocityK, MultScalar(normalK, (-2 * DotProduct(velocityK, normalK)))); //velocity for balls[k]
 			//v new = v - 2(v . n) * n
 			//^^^velocity - 2 * projection of velocity on normal^^^
 
-			spdX = newVelocity.x;
-			spdY = newVelocity.y;
+			//move both balls to the point of collision
+			balls[i]->cx += balls[i]->spdX * t;
+			balls[i]->cy += balls[i]->spdY * t;
+			balls[k]->cx += balls[k]->spdX * t;
+			balls[k]->cy += balls[k]->spdY * t;
 
-			break;
+			//set new speed
+			balls[i]->spdX = newVelocity.x;
+			balls[i]->spdY = newVelocity.y;
+			balls[k]->spdX = newVelocityK.x;
+			balls[k]->spdY = newVelocityK.y;
+
+			//move both balls after the collision
+			balls[i]->cx += balls[i]->spdX * (1 - t);
+			balls[i]->cy += balls[i]->spdY * (1 - t);
+			balls[k]->cx += balls[k]->spdX * (1 - t);
+			balls[k]->cy += balls[k]->spdY * (1 - t);
 		}
 	}
 }
