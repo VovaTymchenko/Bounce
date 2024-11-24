@@ -31,10 +31,10 @@ int main()
 	Circle* circle2 = new Circle(90, 90, 0, 30);
 	//AddCircle(circle2);
 
-	Ball* ball1 = new Ball(30, 10, 8, 0, -2.3);
+	Ball* ball1 = new Ball(30, 10, 8, 0, 2.3);
 	AddBall(ball1);
 
-	Ball* ball2 = new Ball(30, 20, 10, 0, -1.7);
+	Ball* ball2 = new Ball(30, 50, 10, 0, 1.7);
 	AddBall(ball2);
 
 	Ball* ball3 = new Ball(130, 130, 6, 1.4, 2.2);

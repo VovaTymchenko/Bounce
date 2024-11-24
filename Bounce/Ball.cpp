@@ -101,23 +101,36 @@ void Ball::Bounce(const std::vector<Circle*>& circles, const std::vector<Ball*>&
 			t2 = (-B - sqrt(pow(B, 2) - 4 * A * C)) / (2 * A); //the quadratic equation
 			if (t1 < t2) t = t1;
 			else t = t2;
-			//t has a 0 to 1 value, which lets us move the balls by a range of distances from (0, 0) to (spdX, spdY). It's pretty much a mask value
-
-			if ((pow(B, 2) - 4 * A * C) <= 0)
+			if (t <= 0)
 			{
 				while (true)
 				{
-					std::cout << "youre a fool \n";
+					std::cout << "t is <= 0";
 				}
 			}
-			
-			vector2d normal((balls[i]->cx + balls[i]->spdX * t) - (balls[k]->cx + balls[k]->spdX * t), (balls[i]->cy + balls[i]->spdY * t) - (balls[k]->cy + balls[k]->spdY * t));
-			normal = Normalize(normal); //normal for balls[i]
-			vector2d normalK = MultScalar(normal, -1); //normal for balls[k]
+			//t has a 0 to 1 value, which lets us move the balls by a range of distances from (0, 0) to (spdX, spdY). It's pretty much a mask value
 
-			vector2d velocity(balls[i]->spdX, balls[i]->spdY);
+			vector2d velocity(balls[i]->spdX, balls[i]->spdY); //pre-collision velocity of balls[i]
+			vector2d velocityK(balls[k]->spdX, balls[k]->spdY); //pre-collision velocity of balls[k]
+
+			vector2d normal((balls[i]->cx + balls[i]->spdX * t) - (balls[k]->cx + balls[k]->spdX * t), (balls[i]->cy + balls[i]->spdY * t) - (balls[k]->cy + balls[k]->spdY * t));
+
+			normal = Normalize(normal); //normal for balls[i]
+			vector2d normalK = MultScalar(normal, 1); //normal for balls[k]
+
+			vector2d relDir = MultScalar(normal, DotProduct(velocity, normal)); //normalized projection of balls[i] velocity on normal
+			vector2d relDirK = MultScalar(normal, DotProduct(velocityK, normal)); //normalized projection of balls[k] velocity on normal
+
+			bool fasterK = (abs(FindLength(MultScalar(normal, (DotProduct(velocity, normal))))) < abs(FindLength(MultScalar(normal, (DotProduct(velocityK, normal))))));
+			
+			if (DotProduct(relDir, relDirK) < 0) //if dot product is < 0 the vector are pointing in opposite directions
+			{
+				//if projections of both balls' velocity on normal are not co-directed, flip the faster ball's normal vector
+				if (fasterK) normal = MultScalar(normal, -1);
+				else normalK = MultScalar(normalK, -1);
+			}
+
 			vector2d newVelocity = AddVector(velocity, MultScalar(normal, (-2 * DotProduct(velocity, normal)))); //velocity for balls[i]
-			vector2d velocityK(balls[k]->spdX, balls[k]->spdY);
 			vector2d newVelocityK = AddVector(velocityK, MultScalar(normalK, (-2 * DotProduct(velocityK, normalK)))); //velocity for balls[k]
 			//v new = v - 2(v . n) * n
 			//^^^velocity - 2 * projection of velocity on normal^^^
