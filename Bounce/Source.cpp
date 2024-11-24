@@ -31,29 +31,32 @@ int main()
 	Circle* circle2 = new Circle(90, 90, 0, 30);
 	//AddCircle(circle2);
 
-	Ball* ball2 = new Ball(30, 70, 8, 2.4, -4.7);
+	Ball* ball1 = new Ball(30, 10, 8, 0, -2.3);
+	AddBall(ball1);
+
+	Ball* ball2 = new Ball(30, 20, 10, 0, -1.7);
 	AddBall(ball2);
 
 	Ball* ball3 = new Ball(130, 130, 6, 1.4, 2.2);
-	AddBall(ball3);
+	//AddBall(ball3);
 
 	Ball* ball4 = new Ball(50, 50, 10, 5.4, 3.7);
-	AddBall(ball4);
+	//AddBall(ball4);
 
 	Ball* ball5 = new Ball(110, 130, 6, -1.4, 7.2);
-	AddBall(ball5);
+	//AddBall(ball5);
 
 	Ball* ball6 = new Ball(10, 9, 8, 2.4, -4.7);
-	AddBall(ball6);
+	//AddBall(ball6);
 
 	Ball* ball7 = new Ball(150, 150, 6, 1.4, 2.2);
-	AddBall(ball7);
+	//AddBall(ball7);
 
 	Ball* ball8 = new Ball(70, 20, 10, 5.4, 3.7);
-	AddBall(ball8);
+	//AddBall(ball8);
 
 	Ball* ball9 = new Ball(11, 100, 6, -1.4, 7.2);
-	AddBall(ball9);
+	//AddBall(ball9);
 
 	while (true) //main loop - redraws frames
 	{
